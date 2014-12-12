@@ -12,12 +12,15 @@ def getText(nodelist):
 
 
 class Note(object):
-    TOMBOY_TIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%f'
+    TOMBOY_TIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
     RE_TIME_TRAILER = re.compile(r'(\.[0-9]{6})[0-9]*([+-][0-9]{2}:?[0-9]{2})$')
 
     @classmethod
     def parseTimestamp(cls, timestamp):
         date = cls.RE_TIME_TRAILER.sub('\\1', timestamp)
+        print 'date: %s' % date
+        if not date.endswith('Z'):
+            date += 'Z'
         return datetime.datetime.strptime(date, cls.TOMBOY_TIME_FORMAT)
 
     def __init__(self, filename):
